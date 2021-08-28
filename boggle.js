@@ -1,9 +1,9 @@
-// Code for reading file adapted from 
+// Code for reading file adapted from
 // https://nodejs.dev/learn/reading-files-with-nodejs
 const fs = require('fs')
 let words = []
 
-// Takes a list of words (Unix newline delimited) and creates an 
+// Takes a list of words (Unix newline delimited) and creates an
 // array of words
 try {
   const data = fs.readFileSync('truncated_dict.txt', 'utf8')
@@ -13,13 +13,14 @@ try {
   console.error(err)
 }
 
-// Defines a node in the Trie. Its value is a character and
-// its children is an object that stores the next character
-// in a word as {character: TrieNode} 
+// Defines a node in the Trie. Cildren is an object that stores
+// the next character in a word as {character: TrieNode} and
+// isWord is a bool indicating whether it's a terminal node
+// for a complete word.
 class TrieNode {
-  constructor(value) {
+  constructor() {
     this.children = new Object()
-    this.value = value
+    this.isWord = false
   }
 }
 
@@ -29,7 +30,7 @@ class Trie {
     this.root = new TrieNode('')
   }
 
-  // Adds a word to the Trie
+  // Adds a word to the trie
   add(word) {
     let i = 0
     let node = this.root
@@ -48,6 +49,9 @@ class Trie {
       node = node.children[word[i]]
       i += 1
     }
+
+    // indicate word is complete
+    node.isWord = true
   }
 }
 
@@ -65,4 +69,4 @@ words.forEach((word) => {
 
 // testing
 console.log(dictionary.root.children)
-console.log(dictionary.root.children['a'].children)
+console.log(dictionary.root.children['a'].children['a'])
