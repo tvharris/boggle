@@ -53,6 +53,25 @@ class Trie {
     // indicate word is complete
     node.isWord = true
   }
+
+  // Searches for the string in the Trie. Returns 0 if
+  // it is not found, 1 if it is a complete word, or 2 if
+  // it is a valid prefix.
+  find(s) {
+    let node = this.root
+
+    for (let i = 0; i < s.length; i++) {
+      if (node.children[s[i]]) {
+        // advance to next node
+        node = node.children[s[i]]
+      } else {
+        return 0 // s not in Trie
+      }
+    }
+
+    // s is found, so it's a word or a prefix
+    return node.isWord ? 1 : 2
+  }
 }
 
 let dictionary = new Trie()
@@ -70,3 +89,6 @@ words.forEach((word) => {
 // testing
 console.log(dictionary.root.children)
 console.log(dictionary.root.children['a'].children['a'])
+console.log('not a word:', dictionary.find('aab'))
+console.log('word:', dictionary.find('aah'))
+console.log('prefix:', dictionary.find('aan'))
