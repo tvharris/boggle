@@ -85,6 +85,13 @@ words.forEach((word) => {
   }
 })
 
+// returns a random letter from a-z
+function getRandomChr() {
+  // generate random ascii code for a-z
+  let randInt = Math.floor(Math.random() * 26 + 97)
+  return String.fromCharCode(randInt) 
+}
+
 // Takes a matrix of letters and a dictionary (Trie) and
 // returns the words that can be formed by adjacent or diagonal letters
 function boggle(mat, dict) {
@@ -187,3 +194,4 @@ let matrix = [
   ['a', 'l', 's', 'b']
 ]
 console.log(boggle(matrix, dictionary))
+
