@@ -6,8 +6,8 @@ let words = []
 // Takes a list of words (Unix newline delimited) and creates an
 // array of words
 try {
-  const data = fs.readFileSync('truncated_dict.txt', 'utf8')
-  // const data = fs.readFileSync('dictionary.txt', 'utf8')
+  // const data = fs.readFileSync('truncated_dict.txt', 'utf8')
+  const data = fs.readFileSync('dictionary.txt', 'utf8')
   words = data.split('\n')
 } catch (err) {
   console.error(err)
@@ -80,15 +80,111 @@ let dictionary = new Trie()
 // fill the Trie dictionary
 words.forEach((word) => {
   // only include words of valid length for Boggle
-  if (3 <= word.length <= 16) {
+  if (word.length >= 3 && word.length <= 16) {
     dictionary.add(word)
     // console.log(word, word[i])
   }
 })
 
+// Takes a matrix of letters and a dictionary (Trie) and
+// returns the words that can be formed by adjacent or diagonal letters
+function boggle(mat, dict) {
+  // use count (below) to verify total number of strings in matrix
+  // must comment out the inDict if-else block below and uncomment count += 1, return count
+  // let count = 0
+  let numRows = mat.length
+  let numCols = mat[0].length
+  let maxWordLength = numRows * numCols
+  let words = new Set()
+  let stack = []
+  let directions = [
+    [0, 1],
+    [1, 1],
+    [1, 0],
+    [1, -1],
+    [0, -1],
+    [-1, -1],
+    [-1, 0],
+    [-1, 1],
+  ]
+
+  // depth-first traversals starting from each letter
+  for (let i = 0; i < numRows; i++) {
+    for (let j = 0; j < numCols; j++) {
+      let str = mat[i][j]
+      let visited = new Set()
+      stack.push([i, j, str, visited])
+
+      while (stack.length > 0) {
+        // count += 1
+
+        let [i, j, str, visited] = stack.pop()
+
+        // determine if str is word, prefix, or neither
+        let inDict = dict.find(str)
+        if (inDict === 1) {
+          words.add(str)
+        } else if (inDict === 0) {
+          continue // not in dict, stop this traversal
+        }
+
+        // check for traversal limit
+        if (str.length < maxWordLength) {
+          // copy visited, otherwise all visited in stack will refer to same set
+          let visitedCopy = new Set(visited)
+          visitedCopy.add([i, j].toString())
+
+          // push all unvisited neighbors onto stack
+          directions.forEach(([x, y]) => {
+            let row = i + x
+            let col = j + y
+            if (
+              row >= 0 &&
+              row < numRows &&
+              col >= 0 &&
+              col < numCols &&
+              !visitedCopy.has([row, col].toString())
+            ) {
+              nextStr = str + mat[row][col]
+              stack.push([row, col, nextStr, visitedCopy])
+            }
+          })
+        }
+      }
+    }
+  }
+  return words
+  // return count
+}
+
 // testing
-console.log(dictionary.root.children)
-console.log(dictionary.root.children['a'].children['a'])
-console.log('not a word:', dictionary.find('aab'))
-console.log('word:', dictionary.find('aah'))
-console.log('prefix:', dictionary.find('aan'))
+// console.log(dictionary.root.children)
+// console.log(dictionary.root.children['a'].children['a'])
+// console.log('not a word:', dictionary.find('aab'))
+// console.log('word:', dictionary.find('aah'))
+// console.log('prefix:', dictionary.find('aan'))
+// let matrix = [
+//   ['a', 'b'],
+//   ['a', 'l'],
+// ]
+
+// let matrix = [
+//   ['1', '2'],
+//   ['3', '4'],
+// ]
+// let matrix = [
+//   ['j', 'j'],
+//   ['j', 'j'],
+// ]
+// let matrix = [
+//   ['a', 'b', 'a'],
+//   ['a', 'b', 'l'],
+//   ['a', 'l', 'a'],
+// ]
+let matrix = [
+  ['a', 'b', 'a', 'b'],
+  ['c', 'e', 't', 'b'],
+  ['e', 'm', 'r', 'b'],
+  ['a', 'l', 's', 'b']
+]
+console.log(boggle(matrix, dictionary))
