@@ -6,8 +6,7 @@ let words = []
 // Takes a list of words (Unix newline delimited) and creates an
 // array of words
 try {
-  // const data = fs.readFileSync('truncated_dict.txt', 'utf8')
-  const data = fs.readFileSync('dictionary.txt', 'utf8')
+  const data = fs.readFileSync('twl06.txt', 'utf8')
   words = data.split('\n')
 } catch (err) {
   console.error(err)
