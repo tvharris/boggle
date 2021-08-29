@@ -89,15 +89,35 @@ words.forEach((word) => {
 function getRandomChr() {
   // generate random ascii code for a-z
   let randInt = Math.floor(Math.random() * 26 + 97)
-  return String.fromCharCode(randInt) 
+  return String.fromCharCode(randInt)
+}
+
+// Optionally takes a number of rows and number of columns
+// (default 4), and returns a matrix of random letters a-z.
+function getRandomMat(numRows = 4, numCols = 4) {
+  let mat = []
+  for (let i = 0; i < numRows; i++) {
+    let row = []
+    for (let j = 0; j < numCols; j++) {
+      row.push(getRandomChr())
+    }
+    mat.push(row)
+  }
+  return mat
 }
 
 // Takes a matrix of letters and a dictionary (Trie) and
 // returns the words that can be formed by adjacent or diagonal letters
-function boggle(mat, dict) {
+function boggle(dict, mat = null) {
   // use count (below) to verify total number of strings in matrix
   // must comment out the inDict if-else block below and uncomment count += 1, return count
   // let count = 0
+
+  if (mat === null) {
+    mat = getRandomMat()
+  }
+  console.log(mat)
+
   let numRows = mat.length
   let numCols = mat[0].length
   let maxWordLength = numRows * numCols
@@ -191,7 +211,7 @@ let matrix = [
   ['a', 'b', 'a', 'b'],
   ['c', 'e', 't', 'b'],
   ['e', 'm', 'r', 'b'],
-  ['a', 'l', 's', 'b']
+  ['a', 'l', 's', 'b'],
 ]
-console.log(boggle(matrix, dictionary))
-
+// console.log(boggle(dictionary, matrix))
+console.log(boggle(dictionary))
