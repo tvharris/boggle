@@ -1,14 +1,15 @@
- /**
+/**
+ * ad
  * @author Travis Harris
  * This program must be executed with one or two command-line arguments:
  * (1) The filename for a text file containing a list of words (Unix newline delimited),
- * (2) (OPTIONAL) A JSON-formatted matrix of letters. 
+ * (2) (OPTIONAL) A JSON-formatted matrix of letters.
  * If a filename is not provided for the matrix, a 4x4 matrix of random letters
  * is used.
- * 
- * All valid words in the matrix according to the provided word list and the 
+ *
+ * All valid words in the matrix according to the provided word list and the
  * rules of Boggle are output to the console.
- * 
+ *
  * Boggle rules: Words are composed of letters connected horizontally, vertically,
  * or diagonally, and they must be at least 3 letters long.
  */
@@ -28,8 +29,9 @@ function loadWords(wordsFilename) {
   try {
     const data = fs.readFileSync(wordsFilename, 'utf8')
     return data.split('\n')
-  } catch (err) {
-    console.error(err)
+  } catch {
+    console.error('Error reading words file.')
+    process.exit(1)
   }
 }
 
@@ -62,8 +64,9 @@ function loadMatrix(matrixFilename) {
   try {
     const data = fs.readFileSync(matrixFilename, 'utf8')
     return JSON.parse(data)
-  } catch (err) {
-    console.error(err)
+  } catch {
+    console.error('Error reading matrix file.')
+    process.exit(1)
   }
 }
 
@@ -177,7 +180,7 @@ function boggle(dict, mat) {
 /**
  * Takes a Set of words and displays them in the console.
  * The words are sorted from longest to shortest and in alphabetical order.
- * @param {Set.<string>} words 
+ * @param {Set.<string>} words
  */
 function displayWords(words) {
   // sort method adapted from Salman A and Fergal at
@@ -189,10 +192,10 @@ function displayWords(words) {
 }
 
 /**
- * Executes the program with the provided words list (Unix new-line delimited) 
+ * Executes the program with the provided words list (Unix new-line delimited)
  * and matrix file (optional).
  * @param {string} wordsFilename Filename, including extension.
- * @param {string} [matrixFilename] Filename, including extension. 
+ * @param {string} [matrixFilename] Filename, including extension.
  */
 function main(wordsFilename, matrixFilename = null) {
   const dictionary = loadDictionary(wordsFilename)
@@ -202,7 +205,17 @@ function main(wordsFilename, matrixFilename = null) {
   displayWords(words)
 }
 
+/**
+ * PROGRAM ENTRY POINT
+ * Handles command-line arguments.
+ */
 if (require.main === module) {
-  const [wordsFilename, mat] = process.argv.slice(2)
-  main(wordsFilename, mat)
+  if (process.argv.length === 2) {
+    console.error(
+      'Error: Expected argument. Usage: node boggle.js words_file [matrix_file]'
+    )
+    process.exit(1)
+  }
+  const [wordsFilename, matrixFilename] = process.argv.slice(2)
+  main(wordsFilename, matrixFilename)
 }
