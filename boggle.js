@@ -72,16 +72,16 @@ function loadDictionary() {
   loadWords().forEach((word) => {
     // only include words of valid length for Boggle
     if (word.length >= 3 && word.length <= 16) {
-      dictionary.add(word)
+      dictionary.add(word.toUpperCase())
     }
   })
   return dictionary
 }
 
-// returns a random letter from a-z
+// returns a random letter from A-Z
 function getRandomChr() {
   // generate random ascii code for a-z
-  const randInt = Math.floor(Math.random() * 26 + 97)
+  const randInt = Math.floor(Math.random() * 26 + 65)
   return String.fromCharCode(randInt)
 }
 
@@ -182,10 +182,10 @@ function main() {
   console.log('Time to load:', t1 - t0)
   // console.log(boggle(dictionary))
   const matrix = [
-    ['a', 'b', 'a', 'b'],
-    ['c', 'e', 't', 'b'],
-    ['e', 'm', 'r', 'b'],
-    ['a', 'l', 's', 'b'],
+    ['A', 'B', 'A', 'B'],
+    ['C', 'E', 'T', 'B'],
+    ['E', 'M', 'R', 'B'],
+    ['A', 'L', 'S', 'B'],
   ]
   console.log(boggle(dictionary, matrix))
   const t2 = Date.now()
