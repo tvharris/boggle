@@ -1,12 +1,30 @@
+ /**
+ * @author Travis Harris
+ * This program must be executed with one or two command-line arguments:
+ * (1) The filename for a text file containing a list of words (Unix newline delimited),
+ * (2) (OPTIONAL) A JSON-formatted matrix of letters. 
+ * If a filename is not provided for the matrix, a 4x4 matrix of random letters
+ * is used.
+ * 
+ * All valid words in the matrix according to the provided word list and the 
+ * rules of Boggle are output to the console.
+ * 
+ * Boggle rules: Words are composed of letters connected horizontally, vertically,
+ * or diagonally, and they must be at least 3 letters long.
+ */
+
 const Trie = require('./trie.js')
 
+/**
+ * Loads a list of words from a file (Unix newline delimited).
+ * @param {string} wordsFilename Filename, including extension.
+ * @returns {Array.<string>} Array of words.
+ */
 function loadWords(wordsFilename) {
   // Code for reading file adapted from
   // https://nodejs.dev/learn/reading-files-with-nodejs
   const fs = require('fs')
 
-  // Takes a list of words (Unix newline delimited) and creates an
-  // array of words
   try {
     const data = fs.readFileSync(wordsFilename, 'utf8')
     return data.split('\n')
@@ -15,10 +33,15 @@ function loadWords(wordsFilename) {
   }
 }
 
+/**
+ * Creates a Trie loaded with words from a file (Unix newline delimited).
+ * @param {string} wordsFilename Filename, including extension.
+ * @returns {Trie} Trie containing words.
+ */
 function loadDictionary(wordsFilename) {
   const dictionary = new Trie()
 
-  // fill the Trie dictionary
+  // Put words into the Trie
   loadWords(wordsFilename).forEach((word) => {
     // only include words of valid length for Boggle
     if (word.length >= 3 && word.length <= 16) {
@@ -28,7 +51,11 @@ function loadDictionary(wordsFilename) {
   return dictionary
 }
 
-// Takes a filename for a json-formatted matrix and returns the matrix
+/**
+ * Loads a matrix from a JSON file.
+ * @param {string} matrixFilename Filename, including extension.
+ * @returns {Array.<Array.<string>>} 2D-Array.
+ */
 function loadMatrix(matrixFilename) {
   const fs = require('fs')
 
@@ -40,15 +67,22 @@ function loadMatrix(matrixFilename) {
   }
 }
 
-// returns a random letter from A-Z
+/**
+ * Returns a random letter from A-Z.
+ * @returns {string} Single character.
+ */
 function getRandomChr() {
   // generate random ascii code for a-z
   const randInt = Math.floor(Math.random() * 26 + 65)
   return String.fromCharCode(randInt)
 }
 
-// Optionally takes a number of rows and number of columns
-// (default 4), and returns a matrix of random letters a-z.
+/**
+ * Generates a matrix of random letters (A-Z) of the specified size.
+ * @param {number} [numRows=4] Default value is 4.
+ * @param {number} [numCols=4] Default value is 4.
+ * @returns {Array.<Array.<string>>} 2D-Array.
+ */
 function getRandomMat(numRows = 4, numCols = 4) {
   const mat = []
   for (let i = 0; i < numRows; i++) {
@@ -61,11 +95,19 @@ function getRandomMat(numRows = 4, numCols = 4) {
   return mat
 }
 
-// Takes a matrix of letters and a dictionary (Trie) and
-// returns the words that can be formed by adjacent or diagonal letters
+/**
+ * Takes a Trie containing all valid words and a matrix of letters (A-Z) and
+ * finds all words according to the rules of Boggle:
+ * Words are composed of letters connected horizontally, vertically,
+ * or diagonally, and they must be at least 3 letters long.
+ * @param {Trie} dict Trie-based dictionary containing all possible words.
+ * @param {Array.<Array.<string>>} mat Matrix to be searched.
+ * @returns {Set.<string>} Words in matrix found in dictionary.
+ */
 function boggle(dict, mat) {
   // use count (below) to verify total number of strings in matrix
   // must comment out the inDict if-else block below and uncomment count += 1, return count
+
   // let count = 0
 
   const numRows = mat.length
@@ -132,17 +174,26 @@ function boggle(dict, mat) {
   // return count
 }
 
-// takes a set of words and displays them in the console
-// sorts longest to shortest and alphabetical for ties
-// sort method adapted from Salman A and Fergal at
-// https://stackoverflow.com/questions/10630766/how-to-sort-an-array-based-on-the-length-of-each-element/10630852
+/**
+ * Takes a Set of words and displays them in the console.
+ * The words are sorted from longest to shortest and in alphabetical order.
+ * @param {Set.<string>} words 
+ */
 function displayWords(words) {
+  // sort method adapted from Salman A and Fergal at
+  // https://stackoverflow.com/questions/10630766/how-to-sort-an-array-based-on-the-length-of-each-element/10630852
   const sortedWords = Array.from(words).sort(
     (a, b) => b.length - a.length || a.localeCompare(b)
   )
   sortedWords.forEach((word) => console.log(word))
 }
 
+/**
+ * Executes the program with the provided words list (Unix new-line delimited) 
+ * and matrix file (optional).
+ * @param {string} wordsFilename Filename, including extension.
+ * @param {string} [matrixFilename] Filename, including extension. 
+ */
 function main(wordsFilename, matrixFilename = null) {
   const dictionary = loadDictionary(wordsFilename)
   const mat = matrixFilename ? loadMatrix(matrixFilename) : getRandomMat()
