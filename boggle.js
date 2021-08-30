@@ -133,19 +133,26 @@ function boggle(dict, mat = null) {
       }
     }
   }
-  // sorts longest to shortest and alphabetical for ties
-  // sort method adapted from Salman A and Fergal at
-  // https://stackoverflow.com/questions/10630766/how-to-sort-an-array-based-on-the-length-of-each-element/10630852
-  return Array.from(words).sort(
+  return words
+  // return count
+}
+
+// takes a set of words and displays them in the console
+// sorts longest to shortest and alphabetical for ties
+// sort method adapted from Salman A and Fergal at
+// https://stackoverflow.com/questions/10630766/how-to-sort-an-array-based-on-the-length-of-each-element/10630852
+function displayWords(words) {
+  const sortedWords = Array.from(words).sort(
     (a, b) => b.length - a.length || a.localeCompare(b)
   )
-  // return count
+  sortedWords.forEach((word) => console.log(word))
 }
 
 function main(wordsFilename, matrixFilename = null) {
   const dictionary = loadDictionary(wordsFilename)
   const mat = matrixFilename ? loadMatrix(matrixFilename) : null
-  console.log(boggle(dictionary, mat))
+  const words = boggle(dictionary, mat)
+  displayWords(words)
 }
 
 if (require.main === module) {
