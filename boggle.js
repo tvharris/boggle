@@ -63,15 +63,10 @@ function getRandomMat(numRows = 4, numCols = 4) {
 
 // Takes a matrix of letters and a dictionary (Trie) and
 // returns the words that can be formed by adjacent or diagonal letters
-function boggle(dict, mat = null) {
+function boggle(dict, mat) {
   // use count (below) to verify total number of strings in matrix
   // must comment out the inDict if-else block below and uncomment count += 1, return count
   // let count = 0
-
-  if (mat === null) {
-    mat = getRandomMat()
-  }
-  console.log(mat)
 
   const numRows = mat.length
   const numCols = mat[0].length
@@ -150,7 +145,8 @@ function displayWords(words) {
 
 function main(wordsFilename, matrixFilename = null) {
   const dictionary = loadDictionary(wordsFilename)
-  const mat = matrixFilename ? loadMatrix(matrixFilename) : null
+  const mat = matrixFilename ? loadMatrix(matrixFilename) : getRandomMat()
+  console.log(mat)
   const words = boggle(dictionary, mat)
   displayWords(words)
 }
