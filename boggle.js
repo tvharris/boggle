@@ -1,54 +1,4 @@
-// Defines a node in the Trie. Cildren is an object that stores
-// the next character in a word as {character: TrieNode} and
-// isWord is a bool indicating whether it's a terminal node
-// for a complete word.
-class TrieNode {
-  constructor() {
-    this.children = new Object()
-    this.isWord = false
-  }
-}
-
-// Defines a Trie, used for storing the dictionary
-class Trie {
-  constructor() {
-    this.root = new TrieNode('')
-  }
-
-  // Adds a word to the trie
-  add(word) {
-    let node = this.root
-
-    // traverse for each char, adding new nodes when necessary
-    for (let i = 0; i < word.length; i++) {
-      if (!node.children[word[i]]) {
-        node.children[word[i]] = new TrieNode(word[i])
-      }
-      node = node.children[word[i]]
-    }
-
-    // indicate word is complete
-    node.isWord = true
-  }
-
-  // Searches for the string s in the Trie. Returns 0 if
-  // it is not found, 1 if it is a complete word, or 2 if
-  // it is a valid prefix.
-  find(s) {
-    let node = this.root
-
-    for (let i = 0; i < s.length; i++) {
-      if (node.children[s[i]]) {
-        node = node.children[s[i]]
-      } else {
-        return 0 // s not in Trie
-      }
-    }
-
-    // s is found, so it's a word or a prefix
-    return node.isWord ? 1 : 2
-  }
-}
+const Trie = require('./trie.js')
 
 function loadWords(wordsFilename) {
   // Code for reading file adapted from
@@ -193,51 +143,12 @@ function boggle(dict, mat = null) {
 }
 
 function main(wordsFilename, matrixFilename = null) {
-  const t0 = Date.now()
   const dictionary = loadDictionary(wordsFilename)
-  const t1 = Date.now()
-  console.log('Time to load dictionary:', t1 - t0)
   const mat = matrixFilename ? loadMatrix(matrixFilename) : null
-
   console.log(boggle(dictionary, mat))
-  const t2 = Date.now()
-  console.log('Time for boggle:', t2 - t1)
 }
 
 if (require.main === module) {
   const [wordsFilename, mat] = process.argv.slice(2)
   main(wordsFilename, mat)
 }
-
-// testing
-// console.log(dictionary.root.children)
-// console.log(dictionary.root.children['a'].children['a'])
-// console.log('not a word:', dictionary.find('aab'))
-// console.log('word:', dictionary.find('aah'))
-// console.log('prefix:', dictionary.find('aan'))
-// let matrix = [
-//   ['a', 'b'],
-//   ['a', 'l'],
-// ]
-
-// let matrix = [
-//   ['1', '2'],
-//   ['3', '4'],
-// ]
-// let matrix = [
-//   ['j', 'j'],
-//   ['j', 'j'],
-// ]
-// let matrix = [
-//   ['a', 'b', 'a'],
-//   ['a', 'b', 'l'],
-//   ['a', 'l', 'a'],
-// ]
-// let matrix = [
-//   ['a', 'b', 'a', 'b'],
-//   ['c', 'e', 't', 'b'],
-//   ['e', 'm', 'r', 'b'],
-//   ['a', 'l', 's', 'b'],
-// ]
-// console.log(boggle(dictionary, matrix))
-// console.log(boggle(dictionary))
