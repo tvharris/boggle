@@ -78,6 +78,18 @@ function loadDictionary(wordsFilename) {
   return dictionary
 }
 
+// Takes a filename for a json-formatted matrix and returns the matrix
+function loadMatrix(matrixFilename) {
+  const fs = require('fs')
+
+  try {
+    const data = fs.readFileSync(matrixFilename, 'utf8')
+    return JSON.parse(data)
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 // returns a random letter from A-Z
 function getRandomChr() {
   // generate random ascii code for a-z
@@ -180,31 +192,21 @@ function boggle(dict, mat = null) {
   // return count
 }
 
-function main([wordsFilename, mat = null]) {
+function main(wordsFilename, matrixFilename = null) {
   const t0 = Date.now()
   const dictionary = loadDictionary(wordsFilename)
   const t1 = Date.now()
-  console.log('Time to load:', t1 - t0)
-  // console.log(boggle(dictionary))
-  
-  if (mat === null) {
-    mat = [
-      ['A', 'B', 'A', 'B'],
-      ['C', 'E', 'T', 'B'],
-      ['E', 'M', 'R', 'B'],
-      ['A', 'L', 'S', 'B'],
-    ]
-  } 
+  console.log('Time to load dictionary:', t1 - t0)
+  const mat = matrixFilename ? loadMatrix(matrixFilename) : null
 
   console.log(boggle(dictionary, mat))
   const t2 = Date.now()
   console.log('Time for boggle:', t2 - t1)
-
-  // console.log(boggle(dictionary))
 }
 
 if (require.main === module) {
-  main(process.argv.slice(2))
+  const [wordsFilename, mat] = process.argv.slice(2)
+  main(wordsFilename, mat)
 }
 
 // testing
