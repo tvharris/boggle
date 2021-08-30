@@ -31,7 +31,7 @@ class Trie {
     node.isWord = true
   }
 
-  // Searches for the string in the Trie. Returns 0 if
+  // Searches for the string s in the Trie. Returns 0 if
   // it is not found, 1 if it is a complete word, or 2 if
   // it is a valid prefix.
   find(s) {
@@ -39,7 +39,6 @@ class Trie {
 
     for (let i = 0; i < s.length; i++) {
       if (node.children[s[i]]) {
-        // advance to next node
         node = node.children[s[i]]
       } else {
         return 0 // s not in Trie
@@ -67,12 +66,11 @@ function loadWords() {
 }
 
 function loadDictionary() {
-  let dictionary = new Trie()
+  const dictionary = new Trie()
   // console.log(dictionary, dictionary.root)
 
   // fill the Trie dictionary
-  let words = loadWords()
-  words.forEach((word) => {
+  loadWords().forEach((word) => {
     // only include words of valid length for Boggle
     if (word.length >= 3 && word.length <= 16) {
       dictionary.add(word)
