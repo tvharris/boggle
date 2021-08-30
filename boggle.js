@@ -1,17 +1,3 @@
-// Code for reading file adapted from
-// https://nodejs.dev/learn/reading-files-with-nodejs
-const fs = require('fs')
-let words = []
-
-// Takes a list of words (Unix newline delimited) and creates an
-// array of words
-try {
-  const data = fs.readFileSync('twl06.txt', 'utf8')
-  words = data.split('\n')
-} catch (err) {
-  console.error(err)
-}
-
 // Defines a node in the Trie. Cildren is an object that stores
 // the next character in a word as {character: TrieNode} and
 // isWord is a bool indicating whether it's a terminal node
@@ -73,17 +59,36 @@ class Trie {
   }
 }
 
-let dictionary = new Trie()
-// console.log(dictionary, dictionary.root)
+function loadWords() {
+  // Code for reading file adapted from
+  // https://nodejs.dev/learn/reading-files-with-nodejs
+  const fs = require('fs')
 
-// fill the Trie dictionary
-words.forEach((word) => {
-  // only include words of valid length for Boggle
-  if (word.length >= 3 && word.length <= 16) {
-    dictionary.add(word)
-    // console.log(word, word[i])
+  // Takes a list of words (Unix newline delimited) and creates an
+  // array of words
+  try {
+    const data = fs.readFileSync('twl06.txt', 'utf8')
+    return data.split('\n')
+  } catch (err) {
+    console.error(err)
   }
-})
+}
+
+function loadDictionary() {
+  let dictionary = new Trie()
+  // console.log(dictionary, dictionary.root)
+
+  // fill the Trie dictionary
+  let words = loadWords()
+  words.forEach((word) => {
+    // only include words of valid length for Boggle
+    if (word.length >= 3 && word.length <= 16) {
+      dictionary.add(word)
+      // console.log(word, word[i])
+    }
+  })
+  return dictionary
+}
 
 // returns a random letter from a-z
 function getRandomChr() {
@@ -183,6 +188,23 @@ function boggle(dict, mat = null) {
   // return count
 }
 
+function main() {
+  let dictionary = loadDictionary()
+  // console.log(boggle(dictionary))
+  // let matrix = [
+  //   ['a', 'b', 'a', 'b'],
+  //   ['c', 'e', 't', 'b'],
+  //   ['e', 'm', 'r', 'b'],
+  //   ['a', 'l', 's', 'b'],
+  // ]
+  // console.log(boggle(dictionary, matrix))
+  console.log(boggle(dictionary))
+}
+
+if (require.main === module) {
+  main()
+}
+
 // testing
 // console.log(dictionary.root.children)
 // console.log(dictionary.root.children['a'].children['a'])
@@ -207,11 +229,11 @@ function boggle(dict, mat = null) {
 //   ['a', 'b', 'l'],
 //   ['a', 'l', 'a'],
 // ]
-let matrix = [
-  ['a', 'b', 'a', 'b'],
-  ['c', 'e', 't', 'b'],
-  ['e', 'm', 'r', 'b'],
-  ['a', 'l', 's', 'b'],
-]
+// let matrix = [
+//   ['a', 'b', 'a', 'b'],
+//   ['c', 'e', 't', 'b'],
+//   ['e', 'm', 'r', 'b'],
+//   ['a', 'l', 's', 'b'],
+// ]
 // console.log(boggle(dictionary, matrix))
-console.log(boggle(dictionary))
+// console.log(boggle(dictionary))
