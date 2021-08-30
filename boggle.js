@@ -17,22 +17,14 @@ class Trie {
 
   // Adds a word to the trie
   add(word) {
-    let i = 0
     let node = this.root
 
-    // traverse for each char in word until char isn't found
-    while (i < word.length && node.children[word[i]]) {
+    // traverse for each char, adding new nodes when necessary
+    for (let i = 0; i < word.length; i++) {
+      if (!node.children[word[i]]) {
+        node.children[word[i]] = new TrieNode(word[i])
+      }
       node = node.children[word[i]]
-      i += 1
-    }
-
-    // add the remaining chars
-    while (i < word.length) {
-      // add char
-      node.children[word[i]] = new TrieNode(word[i])
-      // advance to next node and char
-      node = node.children[word[i]]
-      i += 1
     }
 
     // indicate word is complete
@@ -189,16 +181,22 @@ function boggle(dict, mat = null) {
 }
 
 function main() {
+  const t0 = Date.now()
   let dictionary = loadDictionary()
+  const t1 = Date.now()
+  console.log('Time to load:', t1 - t0)
   // console.log(boggle(dictionary))
-  // let matrix = [
-  //   ['a', 'b', 'a', 'b'],
-  //   ['c', 'e', 't', 'b'],
-  //   ['e', 'm', 'r', 'b'],
-  //   ['a', 'l', 's', 'b'],
-  // ]
-  // console.log(boggle(dictionary, matrix))
-  console.log(boggle(dictionary))
+  let matrix = [
+    ['a', 'b', 'a', 'b'],
+    ['c', 'e', 't', 'b'],
+    ['e', 'm', 'r', 'b'],
+    ['a', 'l', 's', 'b'],
+  ]
+  console.log(boggle(dictionary, matrix))
+  const t2 = Date.now()
+  console.log('Time for boggle:', t2 - t1)
+
+  // console.log(boggle(dictionary))
 }
 
 if (require.main === module) {
