@@ -22,7 +22,7 @@ class TrieNode {
 }
 
 /**
- * Defines a Trie data structure.
+ * Defines a Trie data structure with add and find methods.
  * @class
  * @constructor
  * @public
