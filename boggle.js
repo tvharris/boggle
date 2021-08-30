@@ -50,7 +50,7 @@ class Trie {
   }
 }
 
-function loadWords() {
+function loadWords(wordsFilename) {
   // Code for reading file adapted from
   // https://nodejs.dev/learn/reading-files-with-nodejs
   const fs = require('fs')
@@ -58,18 +58,18 @@ function loadWords() {
   // Takes a list of words (Unix newline delimited) and creates an
   // array of words
   try {
-    const data = fs.readFileSync('twl06.txt', 'utf8')
+    const data = fs.readFileSync(wordsFilename, 'utf8')
     return data.split('\n')
   } catch (err) {
     console.error(err)
   }
 }
 
-function loadDictionary() {
+function loadDictionary(wordsFilename) {
   const dictionary = new Trie()
 
   // fill the Trie dictionary
-  loadWords().forEach((word) => {
+  loadWords(wordsFilename).forEach((word) => {
     // only include words of valid length for Boggle
     if (word.length >= 3 && word.length <= 16) {
       dictionary.add(word.toUpperCase())
@@ -180,19 +180,23 @@ function boggle(dict, mat = null) {
   // return count
 }
 
-function main() {
+function main([wordsFilename, mat = null]) {
   const t0 = Date.now()
-  const dictionary = loadDictionary()
+  const dictionary = loadDictionary(wordsFilename)
   const t1 = Date.now()
   console.log('Time to load:', t1 - t0)
   // console.log(boggle(dictionary))
-  const matrix = [
-    ['A', 'B', 'A', 'B'],
-    ['C', 'E', 'T', 'B'],
-    ['E', 'M', 'R', 'B'],
-    ['A', 'L', 'S', 'B'],
-  ]
-  console.log(boggle(dictionary, matrix))
+  
+  if (mat === null) {
+    mat = [
+      ['A', 'B', 'A', 'B'],
+      ['C', 'E', 'T', 'B'],
+      ['E', 'M', 'R', 'B'],
+      ['A', 'L', 'S', 'B'],
+    ]
+  } 
+
+  console.log(boggle(dictionary, mat))
   const t2 = Date.now()
   console.log('Time for boggle:', t2 - t1)
 
@@ -200,7 +204,7 @@ function main() {
 }
 
 if (require.main === module) {
-  main()
+  main(process.argv.slice(2))
 }
 
 // testing
