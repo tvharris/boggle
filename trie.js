@@ -1,21 +1,45 @@
-// Defines a node in the Trie. Children is an object that stores
-// the next character in a word as {character: TrieNode} and
-// isWord is a bool indicating whether it's a terminal node
-// for a complete word.
+/**
+ * Defines a node to be used by Trie objects.
+ * @class
+ * @constructor
+ * @public
+ */
 class TrieNode {
   constructor() {
+    /**
+     * children stores the next character in a word
+     * @type {Object.<string, TrieNode>}
+     * @public
+     */
     this.children = new Object()
+    /**
+     * Indicates whether this is the terminal node for a word.
+     * @type {boolean}
+     * @public
+     */
     this.isWord = false
   }
 }
 
-// Defines a Trie, used for storing the dictionary
+/**
+ * Defines a Trie data structure.
+ * @class
+ * @constructor
+ * @public
+ */
 class Trie {
   constructor() {
+    /**
+     * @type {TrieNode}
+     * @public
+     */
     this.root = new TrieNode('')
   }
 
-  // Adds a word to the trie
+  /**
+   * Adds a word to the Trie
+   * @param {string} word
+   */
   add(word) {
     let node = this.root
 
@@ -31,9 +55,12 @@ class Trie {
     node.isWord = true
   }
 
-  // Searches for the string s in the Trie. Returns 0 if
-  // it is not found, 1 if it is a complete word, or 2 if
-  // it is a valid prefix.
+  /**
+   * Searches for s in the Trie.
+   * @param {string} s
+   * @returns {number} 0 if it is not found, 1 if it is a complete word,
+   * 2 if it is a valid prefix.
+   */
   find(s) {
     let node = this.root
 
