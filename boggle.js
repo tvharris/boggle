@@ -67,14 +67,12 @@ function loadWords() {
 
 function loadDictionary() {
   const dictionary = new Trie()
-  // console.log(dictionary, dictionary.root)
 
   // fill the Trie dictionary
   loadWords().forEach((word) => {
     // only include words of valid length for Boggle
     if (word.length >= 3 && word.length <= 16) {
       dictionary.add(word)
-      // console.log(word, word[i])
     }
   })
   return dictionary
@@ -83,14 +81,14 @@ function loadDictionary() {
 // returns a random letter from a-z
 function getRandomChr() {
   // generate random ascii code for a-z
-  let randInt = Math.floor(Math.random() * 26 + 97)
+  const randInt = Math.floor(Math.random() * 26 + 97)
   return String.fromCharCode(randInt)
 }
 
 // Optionally takes a number of rows and number of columns
 // (default 4), and returns a matrix of random letters a-z.
 function getRandomMat(numRows = 4, numCols = 4) {
-  let mat = []
+  const mat = []
   for (let i = 0; i < numRows; i++) {
     let row = []
     for (let j = 0; j < numCols; j++) {
@@ -113,12 +111,12 @@ function boggle(dict, mat = null) {
   }
   console.log(mat)
 
-  let numRows = mat.length
-  let numCols = mat[0].length
-  let maxWordLength = numRows * numCols
-  let words = new Set()
-  let stack = []
-  let directions = [
+  const numRows = mat.length
+  const numCols = mat[0].length
+  const maxWordLength = numRows * numCols
+  const words = new Set()
+  const stack = []
+  const directions = [
     [0, 1],
     [1, 1],
     [1, 0],
@@ -132,17 +130,16 @@ function boggle(dict, mat = null) {
   // depth-first traversals starting from each letter
   for (let i = 0; i < numRows; i++) {
     for (let j = 0; j < numCols; j++) {
-      let str = mat[i][j]
-      let visited = new Set()
+      const str = mat[i][j]
+      const visited = new Set()
       stack.push([i, j, str, visited])
 
       while (stack.length > 0) {
         // count += 1
-
-        let [i, j, str, visited] = stack.pop()
+        const [i, j, str, visited] = stack.pop()
 
         // determine if str is word, prefix, or neither
-        let inDict = dict.find(str)
+        const inDict = dict.find(str)
         if (inDict === 1) {
           words.add(str)
         } else if (inDict === 0) {
@@ -152,13 +149,13 @@ function boggle(dict, mat = null) {
         // check for traversal limit
         if (str.length < maxWordLength) {
           // copy visited, otherwise all visited in stack will refer to same set
-          let visitedCopy = new Set(visited)
+          const visitedCopy = new Set(visited)
           visitedCopy.add([i, j].toString())
 
           // push all unvisited neighbors onto stack
           directions.forEach(([x, y]) => {
-            let row = i + x
-            let col = j + y
+            const row = i + x
+            const col = j + y
             if (
               row >= 0 &&
               row < numRows &&
@@ -166,7 +163,7 @@ function boggle(dict, mat = null) {
               col < numCols &&
               !visitedCopy.has([row, col].toString())
             ) {
-              nextStr = str + mat[row][col]
+              const nextStr = str + mat[row][col]
               stack.push([row, col, nextStr, visitedCopy])
             }
           })
@@ -180,11 +177,11 @@ function boggle(dict, mat = null) {
 
 function main() {
   const t0 = Date.now()
-  let dictionary = loadDictionary()
+  const dictionary = loadDictionary()
   const t1 = Date.now()
   console.log('Time to load:', t1 - t0)
   // console.log(boggle(dictionary))
-  let matrix = [
+  const matrix = [
     ['a', 'b', 'a', 'b'],
     ['c', 'e', 't', 'b'],
     ['e', 'm', 'r', 'b'],
