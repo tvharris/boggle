@@ -171,7 +171,12 @@ function boggle(dict, mat = null) {
       }
     }
   }
-  return words
+  // sorts longest to shortest and alphabetical for ties
+  // sort method adapted from Salman A and Fergal at
+  // https://stackoverflow.com/questions/10630766/how-to-sort-an-array-based-on-the-length-of-each-element/10630852
+  return Array.from(words).sort(
+    (a, b) => b.length - a.length || a.localeCompare(b)
+  )
   // return count
 }
 
