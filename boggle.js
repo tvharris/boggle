@@ -8,7 +8,8 @@
  * If a filename is not provided for the matrix, a 4x4 matrix of random letters
  * is used.
  *
- * Output: The matrix and all valid words in the matrix are output to the console.
+ * Output: The matrix and all valid words in the matrix are output to the console,
+ * and a Set of the words is returned.
  * Words are validated using the provided word list and the rules of Boggle.
  * 
  * Boggle rules: Words are composed of letters connected horizontally, vertically,
@@ -197,6 +198,7 @@ function displayWords(words) {
  * and matrix file (optional).
  * @param {string} wordsFilename Filename, including extension.
  * @param {string} [matrixFilename] Filename, including extension.
+ * @returns {Set.<string>} Valid words in matrix.
  */
 function main(wordsFilename, matrixFilename = null) {
   const dictionary = loadDictionary(wordsFilename)
@@ -204,6 +206,7 @@ function main(wordsFilename, matrixFilename = null) {
   console.log(mat)
   const words = boggle(dictionary, mat)
   displayWords(words)
+  return words
 }
 
 /**
