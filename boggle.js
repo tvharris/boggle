@@ -1,15 +1,16 @@
 /**
- * ad
  * @author Travis Harris
- * This program must be executed with one or two command-line arguments:
- * (1) The filename for a text file containing a list of words (Unix newline delimited),
- * (2) (OPTIONAL) A JSON-formatted matrix of letters.
+ * Requirement: trie.js must be in the same directory
+ * Usage: node boggle.js words_file [matrix_file]'
+ * 
+ * words_file is a text file containing a list of words (Unix newline delimited).
+ * matrix_file (optional) is a JSON-formatted matrix of letters (A-Z).
  * If a filename is not provided for the matrix, a 4x4 matrix of random letters
  * is used.
  *
- * All valid words in the matrix according to the provided word list and the
- * rules of Boggle are output to the console.
- *
+ * Output: The matrix and all valid words in the matrix are output to the console.
+ * Words are validated using the provided word list and the rules of Boggle.
+ * 
  * Boggle rules: Words are composed of letters connected horizontally, vertically,
  * or diagonally, and they must be at least 3 letters long.
  */
@@ -75,7 +76,7 @@ function loadMatrix(matrixFilename) {
  * @returns {string} Single character.
  */
 function getRandomChr() {
-  // generate random ascii code for a-z
+  // generate random ascii code for A-Z
   const randInt = Math.floor(Math.random() * 26 + 65)
   return String.fromCharCode(randInt)
 }
@@ -206,8 +207,7 @@ function main(wordsFilename, matrixFilename = null) {
 }
 
 /**
- * PROGRAM ENTRY POINT
- * Handles command-line arguments.
+ * Handle command-line arguments.
  */
 if (require.main === module) {
   if (process.argv.length === 2) {
