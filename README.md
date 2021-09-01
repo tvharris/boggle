@@ -25,7 +25,7 @@ If a filename is not provided for the matrix, a 4x4 matrix of random letters is 
  
 ## Source of Word List
 
-`twlo6.txt` is the North America Scrabble word list from https://www.wordgamedictionary.com/word-lists/
+`twl06.txt` is the North America Scrabble word list from https://www.wordgamedictionary.com/word-lists/
 
 ## References
 
